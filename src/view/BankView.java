@@ -134,4 +134,21 @@ public class BankView {
          System.out.println("Phone: " + account.getPhone() + "\n");
       }
    }
+
+   //DEPOSIT FORM
+   public int depositForm () {
+      System.out.println("\nDEPOSIT FORM");
+      System.out.println("=============");
+
+      try {
+         input.nextLine(); //remove garbage
+
+         System.out.print("Amount: ");
+         return input.nextInt();
+      } catch (InputMismatchException e) {
+         System.out.println("Invalid input. Try again!");
+         e.getMessage();
+         return -1;
+      }
+   }
 }

@@ -87,9 +87,7 @@ public class BankController {
             int depositSelected = bankView.depositOptions();
             switch (depositSelected) {
                case 1 -> {
-                  //Pass self account number to check if it exits
-                  //accountsList.findAccount();
-
+                  bankView.depositForm();
                }
             }
          }
