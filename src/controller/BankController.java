@@ -34,22 +34,24 @@ public class BankController {
       String loginName = loginUser[0];
       String loginPhone = loginUser[1];
 
+      //Find account of login user
       BankModel loginUserFound = accountsList.findAccount(loginPhone);
 
+      //Extract account number of login user
+      int loginUserAccNumber = loginUserFound.getAccountNumber();
+
+      int mainOptionsSelection = 0;
       //Check if the fetched account matches the current login account
       if (loginUserFound != null) {
          bankView.welcomeLoginUser(loginName);
+
+         //Call and receive Account Options
+         mainOptionsSelection = bankView.mainOptions();
+
       } else {
-         bankView.errorMessages("Account not in our system. Please create a new account!");
+         bankView.errorMessages("\nAccount not in our system. Please create a new account!");
          //Take me to only create a new account option, not menu options
       }
-
-
-      //Call and receive Account Options
-      int mainOptionsSelection = bankView.mainOptions();
-
-      //Receive new account details
-      //BankModel createdAccount = null;
 
       //Use switch to branch
       switch (mainOptionsSelection) {

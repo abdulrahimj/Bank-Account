@@ -36,7 +36,7 @@ public class BankView {
    }
 
    public void welcomeLoginUser (String loginUser) {
-      System.out.println("Welcome Back " + loginUser);
+      System.out.println("\nWelcome Back " + loginUser);
    }
 
    //Bank transaction Options
@@ -111,6 +111,7 @@ public class BankView {
       System.out.println("Account Name: " + newAccountCreated.getAccountHolder());
       System.out.println("Account Number: " + newAccountCreated.getAccountNumber());
       System.out.println("Balance: SLE " + newAccountCreated.getBalance());
+      System.out.println("Phone: " + newAccountCreated.getPhone());
    }
 
    //ERROR MESSAGES
@@ -129,7 +130,8 @@ public class BankView {
       for (BankModel account : allAccounts) {
          System.out.println("Acc Num: " + account.getAccountNumber());
          System.out.println("Acc Name: " + account.getAccountHolder());
-         System.out.println("Balance: " + account.getBalance() + "\n");
+         System.out.println("Balance: " + account.getBalance());
+         System.out.println("Phone: " + account.getPhone() + "\n");
       }
    }
 }
