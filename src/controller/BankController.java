@@ -39,11 +39,12 @@ public class BankController {
             try {
                BankModel createdAccount = accountsList.createNewAccount(name, address, phone);
 
-               accountsList.saveObjectToFile();
-
-               //check if account was indeed created before sending message
+               //check if account was indeed created before saving to file and sending message
                if (createdAccount != null) {
+                  accountsList.saveObjectToFile();
                   bankView.newAccountMessage(createdAccount);
+               } else {
+                  bankView.errorMessages("Account creation failed. Please try again!");
                }
             } catch (IOException e) {
                bankView.errorMessages("CRITICAL ERROR: Data did not save! " + e.getMessage());

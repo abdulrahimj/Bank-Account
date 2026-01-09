@@ -80,7 +80,7 @@ public class BankView {
    //Message for New Account created
    public void newAccountMessage (BankModel newAccountCreated) {
       System.out.println("\nCongratulation!!!");
-      System.out.println("You have created a new bank account with HALAL Bank. Account details: ");
+      System.out.println("You have successfully created a new bank account with HALAL Bank. Account details: ");
       System.out.println("Account Name: " + newAccountCreated.getAccountHolder());
       System.out.println("Account Number: " + newAccountCreated.getAccountNumber());
       System.out.println("Balance: SLE " + newAccountCreated.getBalance());
