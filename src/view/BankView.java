@@ -1,0 +1,98 @@
+package view;
+
+import model.BankModel;
+
+import java.sql.SQLOutput;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class BankView {
+   Scanner input = new Scanner(System.in);
+
+   public void welcomeMessage () {
+      System.out.println("WELCOME TO HALAL BANK");
+      System.out.println("=====================");
+   }
+
+   //Bank transaction Options
+   public int mainOptions () {
+      System.out.println("1. Create new account");
+      System.out.println("2. Deposit");
+      System.out.println("3. Withdraw");
+      System.out.println("4. Check balance");
+      System.out.println("5. Exit");
+
+      System.out.print("Select Choice: ");
+
+      try {
+         return input.nextInt();
+
+      } catch (InputMismatchException e) {
+         input.nextLine(); //Remove the garbage from scanner
+         return -1;
+      }
+   }
+
+   //DEPOSIT OPTIONS
+   public int depositOptions () {
+      System.out.println("\nDEPOSIT OPTION");
+      System.out.println("==============");
+      System.out.println("1. Self");
+      System.out.println("2. Other");
+      System.out.println("3. Exit");
+
+      System.out.print("Select choice: ");
+
+      try {
+         return input.nextInt();
+
+      } catch (InputMismatchException e) {
+         input.nextLine();
+         return -1;
+      }
+   }
+
+   //Display error message from try catch
+   public void errorMessages (String message) {
+      System.out.println(message);
+   }
+
+   //New Account Details
+   public String[] newAccountDetails () {
+      System.out.println("\nNEW ACCOUNT DETAILS");
+      System.out.println("===================");
+
+      try {
+         input.nextLine(); //garbage remover
+
+         System.out.print("Name: ");
+         String name = input.nextLine();
+
+         System.out.print("Address: ");
+         String address = input.nextLine();
+
+         System.out.print("Phone: ");
+         String phone = input.nextLine();
+
+         return new String[] {name, address, phone};
+
+      } catch (InputMismatchException e) {
+         System.out.println("Invalid input. Try again!");
+         return null;
+      }
+   }
+
+   //Message for New Account created
+   public void newAccountMessage (BankModel newAccountCreated) {
+      System.out.println("\nCongratulation!!!");
+      System.out.println("You have created a new bank account with HALAL Bank. Account details: ");
+      System.out.println("Account Name: " + newAccountCreated.getAccountHolder());
+      System.out.println("Account Number: " + newAccountCreated.getAccountNumber());
+      System.out.println("Balance: SLE " + newAccountCreated.getBalance());
+   }
+
+   //ERROR MESSAGES
+   public void errorMessage (String message) {
+      System.out.println("Error: " + message);
+   }
+}
