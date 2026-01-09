@@ -16,8 +16,33 @@ public class BankView {
       System.out.println("=====================");
    }
 
+   //LOGIN
+   public String[] loginForm () {
+      System.out.println("-----Please Login----");
+
+      try {
+         System.out.print("Name: ");
+         String name = input.nextLine();
+
+         System.out.print("Phone: ");
+         String phone = input.nextLine();
+
+         return new String[] {name, phone};
+
+      } catch (InputMismatchException e) {
+         System.out.println("Invalid input. Please try again!");
+         return null;
+      }
+   }
+
+   public void welcomeLoginUser (String loginUser) {
+      System.out.println("Welcome Back " + loginUser);
+   }
+
    //Bank transaction Options
    public int mainOptions () {
+      System.out.println("\n ACCOUNT OPTIONS");
+      System.out.println("=================");
       System.out.println("1. Create new account");
       System.out.println("2. Deposit");
       System.out.println("3. Withdraw");

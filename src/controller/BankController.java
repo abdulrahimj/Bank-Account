@@ -20,6 +20,32 @@ public class BankController {
       bankView.displayAllAccounts(accountsList.getAllAccounts());
 
       bankView.welcomeMessage();
+
+      //LOGIN
+      String loginUser[] = bankView.loginForm();
+
+      //Check if user actually filled the form
+      if (loginUser == null) {
+         bankView.errorMessages("Login cancelled or invalid input.");
+         return; //Stop the app or return to start
+      }
+
+      //Unpackage user login details and save to variables. And find his account.
+      String loginName = loginUser[0];
+      String loginPhone = loginUser[1];
+
+      BankModel loginUserFound = accountsList.findAccount(loginPhone);
+
+      //Check if the fetched account matches the current login account
+      if (loginUserFound != null) {
+         bankView.welcomeLoginUser(loginName);
+      } else {
+         bankView.errorMessages("Account not in our system. Please create a new account!");
+         //Take me to only create a new account option, not menu options
+      }
+
+
+      //Call and receive Account Options
       int mainOptionsSelection = bankView.mainOptions();
 
       //Receive new account details
@@ -42,7 +68,7 @@ public class BankController {
             try {
                BankModel createdAccount = accountsList.createNewAccount(name, address, phone);
 
-               //check if account was indeed created before saving to file and sending message
+               //check if an account was indeed created before saving to file and sending message
                if (createdAccount != null) {
                   accountsList.saveObjectToFile();
                   bankView.objectSavedMessage();

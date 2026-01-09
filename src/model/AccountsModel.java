@@ -12,10 +12,11 @@ public class AccountsModel {
    private final String FILE_PATH = "bank_data.dat";
 
    public AccountsModel () {
-      //Load all accounts from file
+      //Load all accounts from a file
       this.accounts = loadObjectFromFile();
    }
 
+   //GETTER
    public List<BankModel> getAllAccounts () {
       return accounts;
    }
@@ -28,10 +29,10 @@ public class AccountsModel {
       //Initial balance
       BigDecimal initialBalance= BigDecimal.valueOf(10.00).setScale(2, RoundingMode.HALF_UP);
 
-      //Create object
+      //Create an object
       BankModel newAccount = new BankModel(name, accountNumber, initialBalance, address, phone);
 
-      //Save new Account to list
+      //Save a new Account to list
       this.accounts.add(newAccount);
 
       return newAccount;
@@ -41,7 +42,7 @@ public class AccountsModel {
    public void saveObjectToFile () throws IOException {
       try (ObjectOutputStream objSave = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
          objSave.writeObject(this.accounts);
-      } //error will be caught by the controller
+      } //an error will be caught by the controller
    }
 
    //LOAD ACCOUNT OBJECTS
@@ -63,12 +64,11 @@ public class AccountsModel {
       }
    }
 
-   //Find a specific account Number to deposit/withdraw
-   public BankModel findAccount (BankModel accountNumber) {
+   //Find a specific account to deposit/withdraw based on user login (phone)
+   public BankModel findAccount (String phone) {
       //Loop through the lists of accounts
-      System.out.println("TEST" + accountNumber);
       for (BankModel account : this.accounts) {
-         if (account == accountNumber) {
+         if (account.getPhone().equalsIgnoreCase(phone)) {
             return account; //Specific account found
          }
       }
