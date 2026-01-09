@@ -90,4 +90,9 @@ public class BankView {
    public void errorMessages (String message) {
       System.out.println(message);
    }
+
+   //DATA (OBJECT) SAVED MESSAGE
+   public void objectSavedMessage () {
+      System.out.println("Data (obj) saved successfully to file.");
+   }
 }

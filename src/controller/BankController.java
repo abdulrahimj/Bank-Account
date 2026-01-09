@@ -16,6 +16,7 @@ public class BankController {
    }
 
    public void start () {
+
       bankView.welcomeMessage();
       int mainOptionsSelection = bankView.mainOptions();
 
@@ -42,12 +43,14 @@ public class BankController {
                //check if account was indeed created before saving to file and sending message
                if (createdAccount != null) {
                   accountsList.saveObjectToFile();
+                  bankView.objectSavedMessage();
+
                   bankView.newAccountMessage(createdAccount);
                } else {
                   bankView.errorMessages("Account creation failed. Please try again!");
                }
             } catch (IOException e) {
-               bankView.errorMessages("CRITICAL ERROR: Data did not save! " + e.getMessage());
+               bankView.errorMessages("CRITICAL ERROR: Data (obj) did not save! " + e.getMessage());
             }
          }
          case 2 -> {
