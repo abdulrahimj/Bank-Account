@@ -16,6 +16,10 @@ public class AccountsModel {
       this.accounts = loadObjectFromFile();
    }
 
+   public List<BankModel> getAllAccounts () {
+      return accounts;
+   }
+
    //CREATE NEW BANK ACCOUNT
    public BankModel createNewAccount (String name, String address, String  phone) {
       //Generate random account number

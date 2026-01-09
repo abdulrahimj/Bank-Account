@@ -1,9 +1,11 @@
 package view;
 
+import model.AccountsModel;
 import model.BankModel;
 
 import java.sql.SQLOutput;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class BankView {
@@ -94,5 +96,15 @@ public class BankView {
    //DATA (OBJECT) SAVED MESSAGE
    public void objectSavedMessage () {
       System.out.println("Data (obj) saved successfully to file.");
+   }
+
+   //DISPLAY ALL ACCOUNTS
+   public void displayAllAccounts (List<BankModel> allAccounts) {
+
+      for (BankModel account : allAccounts) {
+         System.out.println("Acc Num: " + account.getAccountNumber());
+         System.out.println("Acc Name: " + account.getAccountHolder());
+         System.out.println("Balance: " + account.getBalance() + "\n");
+      }
    }
 }

@@ -16,6 +16,8 @@ public class BankController {
    }
 
    public void start () {
+      //DISPLAY ALL ACCOUNTS FOR TESTING
+      bankView.displayAllAccounts(accountsList.getAllAccounts());
 
       bankView.welcomeMessage();
       int mainOptionsSelection = bankView.mainOptions();
