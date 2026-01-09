@@ -52,11 +52,6 @@ public class BankView {
       }
    }
 
-   //Display error message from try catch
-   public void errorMessages (String message) {
-      System.out.println(message);
-   }
-
    //New Account Details
    public String[] newAccountDetails () {
       System.out.println("\nNEW ACCOUNT DETAILS");
@@ -92,7 +87,7 @@ public class BankView {
    }
 
    //ERROR MESSAGES
-   public void errorMessage (String message) {
-      System.out.println("Error: " + message);
+   public void errorMessages (String message) {
+      System.out.println(message);
    }
 }
