@@ -3,6 +3,7 @@ package view;
 import model.AccountsModel;
 import model.BankModel;
 
+import java.math.BigDecimal;
 import java.sql.SQLOutput;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -136,19 +137,26 @@ public class BankView {
    }
 
    //DEPOSIT FORM
-   public int depositForm () {
+   public BigDecimal depositForm () {
       System.out.println("\nDEPOSIT FORM");
       System.out.println("=============");
 
       try {
          input.nextLine(); //remove garbage
 
-         System.out.print("Amount: ");
-         return input.nextInt();
+         System.out.print("Amount (NLe): ");
+         return input.nextBigDecimal();
+
       } catch (InputMismatchException e) {
+         input.nextLine(); //Clear the invalid text from scanner
          System.out.println("Invalid input. Try again!");
          e.getMessage();
-         return -1;
+         return null;
       }
+   }
+
+   //BALANCE UPDATE
+   public void balanceUpdate (BigDecimal newBalance) {
+      System.out.println("New Balance: " + newBalance);
    }
 }

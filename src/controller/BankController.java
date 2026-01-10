@@ -5,6 +5,7 @@ import model.BankModel;
 import view.BankView;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 public class BankController {
    private BankView bankView;
@@ -38,7 +39,7 @@ public class BankController {
       BankModel loginUserFound = accountsList.findAccount(loginPhone);
 
       //Extract account number of login user
-      int loginUserAccNumber = loginUserFound.getAccountNumber();
+      //int loginUserAccNumber = loginUserFound.getAccountNumber();
 
       int mainOptionsSelection = 0;
       //Check if the fetched account matches the current login account
@@ -87,7 +88,26 @@ public class BankController {
             int depositSelected = bankView.depositOptions();
             switch (depositSelected) {
                case 1 -> {
-                  bankView.depositForm();
+                  BigDecimal depositAmount = bankView.depositForm();
+
+                  if (depositAmount == null) {
+                     bankView.errorMessages("Invalid amount. Please enter numbers only.");
+                  } else {
+                     //Send the money to the deposit method
+                     loginUserFound.deposit(depositAmount);
+
+                     try {
+                        //Save the updated list to the file
+                        accountsList.saveObjectToFile();
+
+                        //Inform user about their new balance
+                        bankView.objectSavedMessage();
+                        bankView.balanceUpdate(loginUserFound.getBalance());
+
+                     } catch (IOException e) {
+                        bankView.errorMessages("Transaction did not save." + e.getMessage());
+                     }
+                  }
                }
             }
          }
