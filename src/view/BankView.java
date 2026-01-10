@@ -156,7 +156,8 @@ public class BankView {
    }
 
    //BALANCE UPDATE
-   public void balanceUpdate (BigDecimal newBalance) {
-      System.out.println("New Balance: " + newBalance);
+   public void balanceUpdate (BigDecimal newBalance, String name, BigDecimal amount) {
+      System.out.println("Dear " + name + ", you have successfully deposited (NLe:" + amount + ") to your account.");
+      System.out.println("Your new Balance is: " + newBalance);
    }
 }

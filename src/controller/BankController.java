@@ -101,8 +101,8 @@ public class BankController {
                         accountsList.saveObjectToFile();
 
                         //Inform user about their new balance
-                        bankView.objectSavedMessage();
-                        bankView.balanceUpdate(loginUserFound.getBalance());
+                        bankView.objectSavedMessage(); //For admin
+                        bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), depositAmount);
 
                      } catch (IOException e) {
                         bankView.errorMessages("Transaction did not save." + e.getMessage());
