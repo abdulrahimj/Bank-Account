@@ -15,15 +15,6 @@ import java.util.Scanner;
 public class BankView {
    Scanner input = new Scanner(System.in);
 
-   //Define money format patter: #,##0.00
-   DecimalFormat df = new DecimalFormat("#,##0.00");
-
-   //Get the current date and time
-   LocalDateTime now = LocalDateTime.now();
-   //Format the date and time to human readable
-   DateTimeFormatter dateWriter = DateTimeFormatter.ofPattern("E, dd-MMM-yyyy HH:mm:ss");
-   String formattedDate = now.format(dateWriter);
-
    public void welcomeMessage () {
       System.out.println("WELCOME TO HALAL BANK");
       System.out.println("=====================");
@@ -119,6 +110,15 @@ public class BankView {
 
    //Message for New Account created
    public void newAccountMessage (BankModel newAccountCreated) {
+      //Define money format patter: #,##0.00
+      DecimalFormat df = new DecimalFormat("#,##0.00");
+
+      //Get the current date and time
+      LocalDateTime now = LocalDateTime.now();
+      //Format the date and time to human readable
+      DateTimeFormatter dateWriter = DateTimeFormatter.ofPattern("E, dd-MMM-yyyy HH:mm:ss");
+      String formattedDate = now.format(dateWriter);
+
       System.out.println("\nCongratulation!!!");
       System.out.println("You have successfully created a new bank account with HALAL Bank. Account details: ");
       System.out.println("Account Name: " + newAccountCreated.getAccountHolder());
@@ -140,7 +140,8 @@ public class BankView {
 
    //DISPLAY ALL ACCOUNTS
    public void displayAllAccounts (List<BankModel> allAccounts) {
-
+      //Define money format patter: #,##0.00
+      DecimalFormat df = new DecimalFormat("#,##0.00");
 
       for (BankModel account : allAccounts) {
          System.out.println("Acc Num: " + account.getAccountNumber());
@@ -170,6 +171,15 @@ public class BankView {
 
    //BALANCE UPDATE
    public void balanceUpdate (BigDecimal newBalance, String name, BigDecimal amount) {
+      //Define money format patter: #,##0.00
+      DecimalFormat df = new DecimalFormat("#,##0.00");
+
+      //Get the current date and time
+      LocalDateTime now = LocalDateTime.now();
+      //Format the date and time to human readable
+      DateTimeFormatter dateWriter = DateTimeFormatter.ofPattern("E, dd-MMM-yyyy HH:mm:ss");
+      String formattedDate = now.format(dateWriter);
+
       System.out.println("Dear " + name + ", you have successfully deposited (NLe:" + df.format(amount) + ") to your account.");
       System.out.println("Your new Balance is NLe:" + df.format(newBalance));
       System.out.println("Date: " + formattedDate);
