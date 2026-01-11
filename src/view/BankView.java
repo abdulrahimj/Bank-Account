@@ -164,7 +164,6 @@ public class BankView {
       } catch (InputMismatchException e) {
          input.nextLine(); //Clear the invalid text from scanner
          System.out.println("Invalid input. Try again!");
-         e.getMessage();
          return null;
       }
    }

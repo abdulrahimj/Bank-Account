@@ -91,23 +91,22 @@ public class BankController {
                case 1 -> {
                   BigDecimal depositAmount = bankView.depositForm();
 
-                  if (depositAmount == null) {
-                     bankView.errorMessages("Invalid amount. Please enter numbers only.");
-                  } else {
-                     //Send the money to the deposit method
-                     loginUserFound.deposit(depositAmount);
+                  try {
+                     if (depositAmount == null) {
+                        bankView.errorMessages("Invalid input. Please enter numbers only.");
+                     } else {
+                        //Send the money to the deposit method
+                        loginUserFound.deposit(depositAmount);
 
-                     try {
                         //Save the updated list to the file
                         accountsList.saveObjectToFile();
 
                         //Inform user about their new balance
                         bankView.objectSavedMessage(); //For admin
                         bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), depositAmount);
-
-                     } catch (IOException e) {
-                        bankView.errorMessages("Transaction did not save." + e.getMessage());
                      }
+                  } catch (IllegalArgumentException | IOException e) {
+                     bankView.errorMessages("Transaction failed. " + e.getMessage());
                   }
                }
             }
