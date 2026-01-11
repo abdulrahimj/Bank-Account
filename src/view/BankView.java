@@ -5,12 +5,24 @@ import model.BankModel;
 
 import java.math.BigDecimal;
 import java.sql.SQLOutput;
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class BankView {
    Scanner input = new Scanner(System.in);
+
+   //Define money format patter: #,##0.00
+   DecimalFormat df = new DecimalFormat("#,##0.00");
+
+   //Get the current date and time
+   LocalDateTime now = LocalDateTime.now();
+   //Format the date and time to human readable
+   DateTimeFormatter dateWriter = DateTimeFormatter.ofPattern("E, dd-MMM-yyyy HH:mm:ss");
+   String formattedDate = now.format(dateWriter);
 
    public void welcomeMessage () {
       System.out.println("WELCOME TO HALAL BANK");
@@ -111,8 +123,9 @@ public class BankView {
       System.out.println("You have successfully created a new bank account with HALAL Bank. Account details: ");
       System.out.println("Account Name: " + newAccountCreated.getAccountHolder());
       System.out.println("Account Number: " + newAccountCreated.getAccountNumber());
-      System.out.println("Balance: SLE " + newAccountCreated.getBalance());
+      System.out.println("Balance: SLE " + df.format(newAccountCreated.getBalance()));
       System.out.println("Phone: " + newAccountCreated.getPhone());
+      System.out.println("Date: " + formattedDate);
    }
 
    //ERROR MESSAGES
@@ -122,16 +135,17 @@ public class BankView {
 
    //DATA (OBJECT) SAVED MESSAGE
    public void objectSavedMessage () {
-      System.out.println("Data (obj) saved successfully to file.");
+      System.out.println("\nData (obj) saved successfully to file.");
    }
 
    //DISPLAY ALL ACCOUNTS
    public void displayAllAccounts (List<BankModel> allAccounts) {
 
+
       for (BankModel account : allAccounts) {
          System.out.println("Acc Num: " + account.getAccountNumber());
          System.out.println("Acc Name: " + account.getAccountHolder());
-         System.out.println("Balance: " + account.getBalance());
+         System.out.println("Balance NLe: " + df.format(account.getBalance()));
          System.out.println("Phone: " + account.getPhone() + "\n");
       }
    }
@@ -157,7 +171,8 @@ public class BankView {
 
    //BALANCE UPDATE
    public void balanceUpdate (BigDecimal newBalance, String name, BigDecimal amount) {
-      System.out.println("Dear " + name + ", you have successfully deposited (NLe:" + amount + ") to your account.");
-      System.out.println("Your new Balance is: " + newBalance);
+      System.out.println("Dear " + name + ", you have successfully deposited (NLe:" + df.format(amount) + ") to your account.");
+      System.out.println("Your new Balance is NLe:" + df.format(newBalance));
+      System.out.println("Date: " + formattedDate);
    }
 }

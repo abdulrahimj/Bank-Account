@@ -51,7 +51,8 @@ public class BankController {
 
       } else {
          bankView.errorMessages("\nAccount not in our system. Please create a new account!");
-         //Take me to only create a new account option, not menu options
+         //Take me to only create a new account option, not menu options -- not yet implemented
+         return;
       }
 
       //Use switch to branch
