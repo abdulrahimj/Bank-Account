@@ -16,6 +16,9 @@ public class BankController {
       this.accountsList = accountsList;
    }
 
+   //TO BE ACCESSED BY ALL METHODS
+
+
    public void start () {
       //DISPLAY ALL ACCOUNTS FOR TESTING
       bankView.displayAllAccounts(accountsList.getAllAccounts());
@@ -23,7 +26,7 @@ public class BankController {
       bankView.welcomeMessage();
 
       //LOGIN
-      String loginUser[] = bankView.loginForm();
+      String[] loginUser = bankView.loginForm();
 
       //Check if user actually filled the form
       if (loginUser == null) {
@@ -58,7 +61,7 @@ public class BankController {
       //Use switch to branch
       switch (mainOptionsSelection) {
          case 1 -> {
-            String newAccountInfo[] = bankView.newAccountDetails();
+            String[] newAccountInfo = bankView.newAccountDetails();
 
             //Unpackage the details
             if (newAccountInfo == null) {
@@ -89,7 +92,7 @@ public class BankController {
             int depositSelected = bankView.depositOptions();
             switch (depositSelected) {
                case 1 -> {
-                  BigDecimal depositAmount = bankView.depositForm();
+                  BigDecimal depositAmount = bankView.depositAndWithdrawForm("DEPOSIT FORM");
 
                   try {
                      if (depositAmount == null) {
@@ -103,7 +106,7 @@ public class BankController {
 
                         //Inform user about their new balance
                         bankView.objectSavedMessage(); //For admin
-                        bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), depositAmount);
+                        bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), depositAmount, "deposited", "to");
                      }
                   } catch (IllegalArgumentException | IOException e) {
                      bankView.errorMessages("Transaction failed. " + e.getMessage());
@@ -111,7 +114,72 @@ public class BankController {
                }
             }
          }
+         case 3 -> {
+            BigDecimal withdrawAmount = bankView.depositAndWithdrawForm("WITHDRAW FORM");
+
+            try {
+               if (withdrawAmount == null) {
+                  bankView.errorMessages("Invalid input. Please enter numbers only.");
+               } else {
+                  //Send the money to withdraw method
+                  loginUserFound.withdraw(withdrawAmount);
+
+                  //Save the updated list to file
+                  accountsList.saveObjectToFile();
+
+                  //Inform user about their new balance
+                  bankView.objectSavedMessage();
+                  bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), withdrawAmount, "withdrawn", "from");
+               }
+            } catch (IllegalArgumentException | IOException e) {
+               bankView.errorMessages("Transaction failed. " + e.getMessage());
+            }
+         }
+         case 4 -> {
+            BigDecimal checkBalance =  loginUserFound.getBalance();
+            bankView.balanceUpdate(loginUserFound.getAccountHolder(), checkBalance);
+         }
          default -> bankView.errorMessages("Invalid Input. Please select 1-5.");
       }
    }
+   /*
+   //LOGIN METHOD TO FIND CURRENT LOGIN USER
+   public void findCurrentLoginUser () {
+      //LOGIN
+      String[] loginUser = bankView.loginForm();
+
+      //Check if user actually filled the form
+      if (loginUser == null) {
+         bankView.errorMessages("Login cancelled or invalid input.");
+         return; //Stop the app or return to start
+      }
+
+      //Unpackage user login details and save to variables. And find his account.
+      String loginName = loginUser[0];
+      String loginPhone = loginUser[1];
+
+      //Find account of login user
+      BankModel loginUserFound = accountsList.findAccount(loginPhone);
+   }*/
+   /*
+   //DEPOSIT AND WITHDRAW CHECK (Helper Method)
+   public void keepAndTake (BigDecimal amount, String transactionType, String direction) {
+      try {
+         if (amount == null) {
+            bankView.errorMessages("Invalid input. Please enter numbers only.");
+         } else {
+            //Send the money to the deposit method
+            loginUserFound.deposit(amount);
+
+            //Save the updated list to the file
+            accountsList.saveObjectToFile();
+
+            //Inform user about their new balance
+            bankView.objectSavedMessage(); //For admin
+            bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), amount, transactionType, direction);
+         }
+      } catch (IllegalArgumentException | IOException e) {
+         bankView.errorMessages("Transaction failed. " + e.getMessage());
+      }
+   }*/
 }

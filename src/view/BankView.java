@@ -151,9 +151,9 @@ public class BankView {
       }
    }
 
-   //DEPOSIT FORM
-   public BigDecimal depositForm () {
-      System.out.println("\nDEPOSIT FORM");
+   //DEPOSIT & WITHDRAWAL FORM
+   public BigDecimal depositAndWithdrawForm (String heading) {
+      System.out.println("\n"+ heading);
       System.out.println("=============");
 
       try {
@@ -169,8 +169,8 @@ public class BankView {
       }
    }
 
-   //BALANCE UPDATE
-   public void balanceUpdate (BigDecimal newBalance, String name, BigDecimal amount) {
+   //BALANCE UPDATE AFTER A TRANSACTION
+   public void balanceUpdate (BigDecimal newBalance, String name, BigDecimal amount, String transactionType, String direction) {
       //Define money format patter: #,##0.00
       DecimalFormat df = new DecimalFormat("#,##0.00");
 
@@ -180,8 +180,24 @@ public class BankView {
       DateTimeFormatter dateWriter = DateTimeFormatter.ofPattern("E, dd-MMM-yyyy HH:mm:ss");
       String formattedDate = now.format(dateWriter);
 
-      System.out.println("Dear " + name + ", you have successfully deposited (NLe:" + df.format(amount) + ") to your account.");
+      System.out.println("Dear " + name + ", you have successfully " + transactionType + " (NLe:" + df.format(amount) + ") " + direction + " your account.");
       System.out.println("Your new Balance is NLe:" + df.format(newBalance));
+      System.out.println("Date: " + formattedDate);
+   }
+
+   //JUST CHECKING BALANCE WITHOUT ANY TRANSACTION
+   public void balanceUpdate (String name, BigDecimal amount) {
+      //Define money format patter: #,##0.00
+      DecimalFormat df = new DecimalFormat("#,##0.00");
+
+      //Get the current date and time
+      LocalDateTime now = LocalDateTime.now();
+      //Format the date and time to human readable
+      DateTimeFormatter dateWriter = DateTimeFormatter.ofPattern("E, dd-MMM-yyyy HH:mm:ss");
+      String formattedDate = now.format(dateWriter);
+
+      System.out.println("\nMESSAGE");
+      System.out.println("Dear " + name + ", your current balance is NLe: " + df.format(amount));
       System.out.println("Date: " + formattedDate);
    }
 }
