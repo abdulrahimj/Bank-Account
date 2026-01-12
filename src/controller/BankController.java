@@ -39,31 +39,31 @@ public class BankController {
       //Find account of login user
       BankModel loginUserFound = accountsList.findAccount(loginPhone);
 
-      //Extract account number of login user
-      //int loginUserAccNumber = loginUserFound.getAccountNumber();
-
-      int mainOptionsSelection = 0;
       //Check if the fetched account matches the current login account
       if (loginUserFound != null) {
          bankView.welcomeLoginUser(loginName);
 
-         //Call and receive Account Options
-         mainOptionsSelection = bankView.mainOptions();
+         //--KEEP APP RUNNING UNLESS EXIT BY USER--
+         boolean activeLogin = true;
+         while (activeLogin) {
+            //Call and receive Account Options
+            int mainOptionsSelection = bankView.mainOptions();
+
+            //Use switch to branch
+            switch (mainOptionsSelection) {
+               case 1 -> handleCreateNewAccountMenu();
+               case 2 -> handleDepositMenu(loginUserFound);
+               case 3 -> handleSelfDepositAndWithdrawMenu(loginUserFound, "WITHDRAW FORM");
+               case 4 -> handleBalanceMenu(loginUserFound);
+               case 5 -> activeLogin = handleExitMenu();  //Call exit and Stops app (loop)
+               default -> bankView.errorMessages("Invalid Input. Please select 1-5.");
+            }
+         }
 
       } else {
          bankView.errorMessages("\nAccount not in our system. Please create a new account!");
          //Take me to only create a new account option, not menu options -- not yet implemented
          return;
-      }
-
-      //Use switch to branch
-      switch (mainOptionsSelection) {
-         case 1 -> handleCreateNewAccountMenu();
-         case 2 -> handleDepositMenu(loginUserFound);
-         case 3 -> handleSelfDepositAndWithdrawMenu(loginUserFound, "WITHDRAW FORM");
-         case 4 -> handleBalanceMenu(loginUserFound);
-         case 5 -> handleExitMenu();
-         default -> bankView.errorMessages("Invalid Input. Please select 1-5.");
       }
    }
 
@@ -102,6 +102,8 @@ public class BankController {
       String formTitle = "DEPOSIT FORM";
       switch (depositSelected) {
          case 1 -> handleSelfDepositAndWithdrawMenu(loginUserFound, formTitle);
+         case 2 -> otherDeposit();
+         //case 3 -> handleExitMenu();
       }
    }
 
@@ -149,54 +151,13 @@ public class BankController {
       bankView.balanceUpdate(loginUserFound.getAccountHolder(), checkBalance);
    }
 
-   private void handleExitMenu () {
-
+   private boolean handleExitMenu () {
+      bankView.errorMessages("Thanks for banking with us.");
+      return false;  //This will stop the loop (app)
    }
 
-   //METHOD THAT HANDLES THE DEPOSIT OPTIONS
-
-
+   //METHOD THAT HANDLES DEPOSIT TO OTHERS OPTIONS
    private void otherDeposit () {
 
    }
-   /*
-   //LOGIN METHOD TO FIND CURRENT LOGIN USER
-   public void findCurrentLoginUser () {
-      //LOGIN
-      String[] loginUser = bankView.loginForm();
-
-      //Check if user actually filled the form
-      if (loginUser == null) {
-         bankView.errorMessages("Login cancelled or invalid input.");
-         return; //Stop the app or return to start
-      }
-
-      //Unpackage user login details and save to variables. And find his account.
-      String loginName = loginUser[0];
-      String loginPhone = loginUser[1];
-
-      //Find account of login user
-      BankModel loginUserFound = accountsList.findAccount(loginPhone);
-   }*/
-   /*
-   //DEPOSIT AND WITHDRAW CHECK (Helper Method)
-   public void keepAndTake (BigDecimal amount, String transactionType, String direction) {
-      try {
-         if (amount == null) {
-            bankView.errorMessages("Invalid input. Please enter numbers only.");
-         } else {
-            //Send the money to the deposit method
-            loginUserFound.deposit(amount);
-
-            //Save the updated list to the file
-            accountsList.saveObjectToFile();
-
-            //Inform user about their new balance
-            bankView.objectSavedMessage(); //For admin
-            bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), amount, transactionType, direction);
-         }
-      } catch (IllegalArgumentException | IOException e) {
-         bankView.errorMessages("Transaction failed. " + e.getMessage());
-      }
-   }*/
 }
