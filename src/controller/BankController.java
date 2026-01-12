@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 public class BankController {
    private BankView bankView;
    private AccountsModel accountsList;
+   private boolean activeLogin = true;
 
    public BankController (BankView bankView, AccountsModel accountsList) {
       this.bankView = bankView;
@@ -44,7 +45,7 @@ public class BankController {
          bankView.welcomeLoginUser(loginName);
 
          //--KEEP APP RUNNING UNLESS EXIT BY USER--
-         boolean activeLogin = true;
+         //boolean activeLogin = true;
          while (activeLogin) {
             //Call and receive Account Options
             int mainOptionsSelection = bankView.mainOptions();
@@ -100,10 +101,13 @@ public class BankController {
    private void handleDepositMenu (BankModel loginUserFound) {
       int depositSelected = bankView.depositOptions();
       String formTitle = "DEPOSIT FORM";
+      boolean exit = true;
       switch (depositSelected) {
          case 1 -> handleSelfDepositAndWithdrawMenu(loginUserFound, formTitle);
          case 2 -> otherDeposit();
-         //case 3 -> handleExitMenu();
+         case 3 -> handleExitMenu(); //This will take me back to the main menu
+         case 4 -> activeLogin = handleExitMenu();
+         default -> bankView.errorMessages("Invalid Input. Please select 1-4.");
       }
    }
 

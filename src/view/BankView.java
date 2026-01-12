@@ -72,7 +72,8 @@ public class BankView {
       System.out.println("==============");
       System.out.println("1. Self");
       System.out.println("2. Other");
-      System.out.println("3. Exit");
+      System.out.println("3. Back");
+      System.out.println("4. Exit");
 
       System.out.print("Select choice: ");
 
