@@ -67,11 +67,9 @@ public class AccountsModel {
    //Find a specific account to deposit/withdraw based on user login (phone)
    public BankModel findAccount (String phone) {
       //Loop through the lists of accounts
-      for (BankModel account : this.accounts) {
-         if (account.getPhone().equalsIgnoreCase(phone)) {
-            return account; //Specific account found
-         }
-      }
-      return null; //account does not exist
+      return this.accounts.stream() //Return found account
+              .filter(account -> account.getPhone().equalsIgnoreCase(phone))
+              .findFirst()
+              .orElse(null); //account does not exist
    }
 }
