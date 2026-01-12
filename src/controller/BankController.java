@@ -60,7 +60,7 @@ public class BankController {
       switch (mainOptionsSelection) {
          case 1 -> handleCreateNewAccountMenu();
          case 2 -> handleDepositMenu(loginUserFound);
-         case 3 -> handleWithdrawMenu(loginUserFound);
+         case 3 -> handleSelfDepositAndWithdrawMenu(loginUserFound, "WITHDRAW FORM");
          case 4 -> handleBalanceMenu(loginUserFound);
          case 5 -> handleExitMenu();
          default -> bankView.errorMessages("Invalid Input. Please select 1-5.");
@@ -99,47 +99,45 @@ public class BankController {
 
    private void handleDepositMenu (BankModel loginUserFound) {
       int depositSelected = bankView.depositOptions();
+      String formTitle = "DEPOSIT FORM";
       switch (depositSelected) {
-         case 1 -> {
-            BigDecimal depositAmount = bankView.depositAndWithdrawForm("DEPOSIT FORM");
-
-            try {
-               if (depositAmount == null) {
-                  bankView.errorMessages("Invalid input. Please enter numbers only.");
-               } else {
-                  //Send the money to the deposit method
-                  loginUserFound.deposit(depositAmount);
-
-                  //Save the updated list to the file
-                  accountsList.saveObjectToFile();
-
-                  //Inform user about their new balance
-                  bankView.objectSavedMessage(); //For admin
-                  bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), depositAmount, "deposited", "to");
-               }
-            } catch (IllegalArgumentException | IOException e) {
-               bankView.errorMessages("Transaction failed. " + e.getMessage());
-            }
-         }
+         case 1 -> handleSelfDepositAndWithdrawMenu(loginUserFound, formTitle);
       }
    }
 
-   private void handleWithdrawMenu (BankModel loginUserFound) {
-      BigDecimal withdrawAmount = bankView.depositAndWithdrawForm("WITHDRAW FORM");
+   private void handleSelfDepositAndWithdrawMenu (BankModel loginUserFound, String formTitle) {
+      BigDecimal amount = bankView.depositAndWithdrawForm(formTitle);
+
+      String balanceType = "";
+      String balanceDirection = "";
 
       try {
-         if (withdrawAmount == null) {
+         if (amount == null) {
             bankView.errorMessages("Invalid input. Please enter numbers only.");
          } else {
-            //Send the money to withdraw method
-            loginUserFound.withdraw(withdrawAmount);
+            if (formTitle == "DEPOSIT FORM") {
+               //Send the money to deposit method in bank model
+               loginUserFound.deposit(amount);
+               balanceType = "deposited";
+               balanceDirection = "to";
+
+            } else if (formTitle.equalsIgnoreCase("WITHDRAW FORM")) {
+               //Send the money to withdraw method in bank model
+               loginUserFound.withdraw(amount);
+               balanceType = "withdrawn";
+               balanceDirection = "from";
+            }
 
             //Save the updated list to file
             accountsList.saveObjectToFile();
 
             //Inform user about their new balance
             bankView.objectSavedMessage();
-            bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), withdrawAmount, "withdrawn", "from");
+            if (balanceType.equalsIgnoreCase("deposited")) {
+               bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), amount, balanceType, balanceDirection);
+            } else if (balanceType.equalsIgnoreCase("withdrawn")) {
+               bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), amount, balanceType, balanceDirection);
+            }
          }
       } catch (IllegalArgumentException | IOException e) {
          bankView.errorMessages("Transaction failed. " + e.getMessage());
@@ -152,6 +150,13 @@ public class BankController {
    }
 
    private void handleExitMenu () {
+
+   }
+
+   //METHOD THAT HANDLES THE DEPOSIT OPTIONS
+
+
+   private void otherDeposit () {
 
    }
    /*
