@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class BankView {
-   Scanner input = new Scanner(System.in);
+   private final Scanner input = new Scanner(System.in);
+   //Record Container to return different data from a method
+   public record FormatResult (DecimalFormat currencyFormatter, String formattedDate) {}
 
    public void welcomeMessage () {
       System.out.println("WELCOME TO HALAL BANK");
@@ -110,22 +112,16 @@ public class BankView {
 
    //Message for New Account created
    public void newAccountMessage (BankModel newAccountCreated) {
-      //Define money format patter: #,##0.00
-      DecimalFormat df = new DecimalFormat("#,##0.00");
-
-      //Get the current date and time
-      LocalDateTime now = LocalDateTime.now();
-      //Format the date and time to human readable
-      DateTimeFormatter dateWriter = DateTimeFormatter.ofPattern("E, dd-MMM-yyyy HH:mm:ss");
-      String formattedDate = now.format(dateWriter);
+      //Call helper method
+      FormatResult formats = getCurrencyAndDate();
 
       System.out.println("\nCongratulation!!!");
       System.out.println("You have successfully created a new bank account with HALAL Bank. Account details: ");
       System.out.println("Account Name: " + newAccountCreated.getAccountHolder());
       System.out.println("Account Number: " + newAccountCreated.getAccountNumber());
-      System.out.println("Balance: SLE " + df.format(newAccountCreated.getBalance()));
+      System.out.println("Balance: NLe " + formats.currencyFormatter().format(newAccountCreated.getBalance()));
       System.out.println("Phone: " + newAccountCreated.getPhone());
-      System.out.println("Date: " + formattedDate);
+      System.out.println("Date: " + formats.formattedDate());
    }
 
    //ERROR MESSAGES
@@ -140,13 +136,13 @@ public class BankView {
 
    //DISPLAY ALL ACCOUNTS
    public void displayAllAccounts (List<BankModel> allAccounts) {
-      //Define money format patter: #,##0.00
-      DecimalFormat df = new DecimalFormat("#,##0.00");
+      //Call helper method
+      FormatResult formats = getCurrencyAndDate();
 
       for (BankModel account : allAccounts) {
          System.out.println("Acc Num: " + account.getAccountNumber());
          System.out.println("Acc Name: " + account.getAccountHolder());
-         System.out.println("Balance NLe: " + df.format(account.getBalance()));
+         System.out.println("Balance NLe: " + formats.currencyFormatter().format(account.getBalance()));
          System.out.println("Phone: " + account.getPhone() + "\n");
       }
    }
@@ -171,22 +167,26 @@ public class BankView {
 
    //BALANCE UPDATE AFTER A TRANSACTION
    public void balanceUpdate (BigDecimal newBalance, String name, BigDecimal amount, String transactionType, String direction) {
-      //Define money format patter: #,##0.00
-      DecimalFormat df = new DecimalFormat("#,##0.00");
+      //Call helper method
+      FormatResult formats = getCurrencyAndDate();
 
-      //Get the current date and time
-      LocalDateTime now = LocalDateTime.now();
-      //Format the date and time to human readable
-      DateTimeFormatter dateWriter = DateTimeFormatter.ofPattern("E, dd-MMM-yyyy HH:mm:ss");
-      String formattedDate = now.format(dateWriter);
-
-      System.out.println("Dear " + name + ", you have successfully " + transactionType + " (NLe:" + df.format(amount) + ") " + direction + " your account.");
-      System.out.println("Your new Balance is NLe:" + df.format(newBalance));
-      System.out.println("Date: " + formattedDate);
+      System.out.println("Dear " + name + ", you have successfully " + transactionType + " (NLe:" + formats.currencyFormatter().format(amount) + ") " + direction + " your account.");
+      System.out.println("Your new Balance is NLe:" + formats.currencyFormatter().format(newBalance));
+      System.out.println("Date: " + formats.formattedDate());
    }
 
    //JUST CHECKING BALANCE WITHOUT ANY TRANSACTION
    public void balanceUpdate (String name, BigDecimal amount) {
+      //Call helper method
+      FormatResult formats = getCurrencyAndDate();
+
+      System.out.println("\nMESSAGE");
+      System.out.println("Dear " + name + ", your current balance is NLe: " + formats.currencyFormatter.format(amount));
+      System.out.println("Date: " + formats.formattedDate());
+   }
+
+   //CURRENCY AND DATE FORMAT (helper method)
+   public FormatResult getCurrencyAndDate () {
       //Define money format patter: #,##0.00
       DecimalFormat df = new DecimalFormat("#,##0.00");
 
@@ -196,8 +196,7 @@ public class BankView {
       DateTimeFormatter dateWriter = DateTimeFormatter.ofPattern("E, dd-MMM-yyyy HH:mm:ss");
       String formattedDate = now.format(dateWriter);
 
-      System.out.println("\nMESSAGE");
-      System.out.println("Dear " + name + ", your current balance is NLe: " + df.format(amount));
-      System.out.println("Date: " + formattedDate);
+      //Return both currency and date format
+      return new FormatResult(df, formattedDate);
    }
 }

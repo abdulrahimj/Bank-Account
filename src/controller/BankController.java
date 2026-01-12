@@ -16,9 +16,7 @@ public class BankController {
       this.accountsList = accountsList;
    }
 
-   //TO BE ACCESSED BY ALL METHODS
-
-
+   //THIS IS THE MAIN METHOD IN CONTROLLER
    public void start () {
       //DISPLAY ALL ACCOUNTS FOR TESTING
       bankView.displayAllAccounts(accountsList.getAllAccounts());
@@ -60,87 +58,101 @@ public class BankController {
 
       //Use switch to branch
       switch (mainOptionsSelection) {
+         case 1 -> handleCreateNewAccountMenu();
+         case 2 -> handleDepositMenu(loginUserFound);
+         case 3 -> handleWithdrawMenu(loginUserFound);
+         case 4 -> handleBalanceMenu(loginUserFound);
+         case 5 -> handleExitMenu();
+         default -> bankView.errorMessages("Invalid Input. Please select 1-5.");
+      }
+   }
+
+   //FIVE METHODS THAT HANDLES THE MENU OPTIONS
+   private void handleCreateNewAccountMenu () {
+      String[] newAccountInfo = bankView.newAccountDetails();
+
+      //Unpackage the details
+      if (newAccountInfo == null) {
+         return; //stop and return to main menu options
+      }
+
+      String name = newAccountInfo[0];
+      String address = newAccountInfo[1];
+      String phone = newAccountInfo[2];
+
+      try {
+         BankModel createdAccount = accountsList.createNewAccount(name, address, phone);
+
+         //check if an account was indeed created before saving to file and sending message
+         if (createdAccount != null) {
+            accountsList.saveObjectToFile();
+            bankView.objectSavedMessage();
+
+            bankView.newAccountMessage(createdAccount);
+         } else {
+            bankView.errorMessages("Account creation failed. Please try again!");
+         }
+      } catch (IOException e) {
+         bankView.errorMessages("CRITICAL ERROR: Data (obj) did not save! " + e.getMessage());
+      }
+   }
+
+   private void handleDepositMenu (BankModel loginUserFound) {
+      int depositSelected = bankView.depositOptions();
+      switch (depositSelected) {
          case 1 -> {
-            String[] newAccountInfo = bankView.newAccountDetails();
-
-            //Unpackage the details
-            if (newAccountInfo == null) {
-               return; //stop and return to main menu options
-            }
-
-            String name = newAccountInfo[0];
-            String address = newAccountInfo[1];
-            String phone = newAccountInfo[2];
+            BigDecimal depositAmount = bankView.depositAndWithdrawForm("DEPOSIT FORM");
 
             try {
-               BankModel createdAccount = accountsList.createNewAccount(name, address, phone);
-
-               //check if an account was indeed created before saving to file and sending message
-               if (createdAccount != null) {
-                  accountsList.saveObjectToFile();
-                  bankView.objectSavedMessage();
-
-                  bankView.newAccountMessage(createdAccount);
-               } else {
-                  bankView.errorMessages("Account creation failed. Please try again!");
-               }
-            } catch (IOException e) {
-               bankView.errorMessages("CRITICAL ERROR: Data (obj) did not save! " + e.getMessage());
-            }
-         }
-         case 2 -> {
-            int depositSelected = bankView.depositOptions();
-            switch (depositSelected) {
-               case 1 -> {
-                  BigDecimal depositAmount = bankView.depositAndWithdrawForm("DEPOSIT FORM");
-
-                  try {
-                     if (depositAmount == null) {
-                        bankView.errorMessages("Invalid input. Please enter numbers only.");
-                     } else {
-                        //Send the money to the deposit method
-                        loginUserFound.deposit(depositAmount);
-
-                        //Save the updated list to the file
-                        accountsList.saveObjectToFile();
-
-                        //Inform user about their new balance
-                        bankView.objectSavedMessage(); //For admin
-                        bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), depositAmount, "deposited", "to");
-                     }
-                  } catch (IllegalArgumentException | IOException e) {
-                     bankView.errorMessages("Transaction failed. " + e.getMessage());
-                  }
-               }
-            }
-         }
-         case 3 -> {
-            BigDecimal withdrawAmount = bankView.depositAndWithdrawForm("WITHDRAW FORM");
-
-            try {
-               if (withdrawAmount == null) {
+               if (depositAmount == null) {
                   bankView.errorMessages("Invalid input. Please enter numbers only.");
                } else {
-                  //Send the money to withdraw method
-                  loginUserFound.withdraw(withdrawAmount);
+                  //Send the money to the deposit method
+                  loginUserFound.deposit(depositAmount);
 
-                  //Save the updated list to file
+                  //Save the updated list to the file
                   accountsList.saveObjectToFile();
 
                   //Inform user about their new balance
-                  bankView.objectSavedMessage();
-                  bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), withdrawAmount, "withdrawn", "from");
+                  bankView.objectSavedMessage(); //For admin
+                  bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), depositAmount, "deposited", "to");
                }
             } catch (IllegalArgumentException | IOException e) {
                bankView.errorMessages("Transaction failed. " + e.getMessage());
             }
          }
-         case 4 -> {
-            BigDecimal checkBalance =  loginUserFound.getBalance();
-            bankView.balanceUpdate(loginUserFound.getAccountHolder(), checkBalance);
-         }
-         default -> bankView.errorMessages("Invalid Input. Please select 1-5.");
       }
+   }
+
+   private void handleWithdrawMenu (BankModel loginUserFound) {
+      BigDecimal withdrawAmount = bankView.depositAndWithdrawForm("WITHDRAW FORM");
+
+      try {
+         if (withdrawAmount == null) {
+            bankView.errorMessages("Invalid input. Please enter numbers only.");
+         } else {
+            //Send the money to withdraw method
+            loginUserFound.withdraw(withdrawAmount);
+
+            //Save the updated list to file
+            accountsList.saveObjectToFile();
+
+            //Inform user about their new balance
+            bankView.objectSavedMessage();
+            bankView.balanceUpdate(loginUserFound.getBalance(), loginUserFound.getAccountHolder(), withdrawAmount, "withdrawn", "from");
+         }
+      } catch (IllegalArgumentException | IOException e) {
+         bankView.errorMessages("Transaction failed. " + e.getMessage());
+      }
+   }
+
+   private void handleBalanceMenu (BankModel loginUserFound) {
+      BigDecimal checkBalance =  loginUserFound.getBalance();
+      bankView.balanceUpdate(loginUserFound.getAccountHolder(), checkBalance);
+   }
+
+   private void handleExitMenu () {
+
    }
    /*
    //LOGIN METHOD TO FIND CURRENT LOGIN USER
