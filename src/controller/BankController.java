@@ -104,7 +104,7 @@ public class BankController {
       boolean exit = true;
       switch (depositSelected) {
          case 1 -> handleSelfDepositAndWithdrawMenu(loginUserFound, formTitle);
-         case 2 -> otherDeposit();
+         case 2 -> otherDeposit(loginUserFound);
          case 3 -> handleExitMenu(); //This will take me back to the main menu
          case 4 -> activeLogin = handleExitMenu();
          default -> bankView.errorMessages("Invalid Input. Please select 1-4.");
@@ -160,8 +160,35 @@ public class BankController {
       return false;  //This will stop the loop (app)
    }
 
-   //METHOD THAT HANDLES DEPOSIT TO OTHERS OPTIONS
-   private void otherDeposit () {
+   //METHOD THAT HANDLES OTHER DEPOSIT OPTIONS
+   private void otherDeposit (BankModel sender) {
+      BankView.OtherDepositData data = bankView.otherDepositForm();
 
+      if (data == null) {
+         bankView.errorMessages("Invalid input. Please try again.");
+         return;
+      }
+
+      BankModel recipient = accountsList.findAccount(data.accNum());
+
+      if (recipient == null) {
+         bankView.errorMessages("Recipient account not found!");
+         return;
+      }
+
+      try {
+         //Transfer the money
+         BigDecimal amountToTransfer = data.amount();
+         sender.withdraw(amountToTransfer); //With it from senders account
+         recipient.deposit(amountToTransfer);
+
+         //Save and notify
+         accountsList.saveObjectToFile();
+         bankView.objectSavedMessage();
+         bankView.balanceUpdate(sender.getBalance(), sender.getAccountHolder(), amountToTransfer, "transferred ",  " to " + recipient.getAccountHolder() + " from ");
+
+      } catch (IllegalArgumentException | IOException e) {
+         bankView.errorMessages("Transaction failed: " + e.getMessage());
+      }
    }
 }

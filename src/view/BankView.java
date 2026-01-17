@@ -16,6 +16,8 @@ public class BankView {
    private final Scanner input = new Scanner(System.in);
    //Record Container to return different data from a method
    public record FormatResult (DecimalFormat currencyFormatter, String formattedDate) {}
+   //Record Container to return int and BigDecimal
+   public record OtherDepositData (int accNum, BigDecimal amount) {}
 
    public void welcomeMessage () {
       System.out.println("WELCOME TO HALAL BANK");
@@ -148,7 +150,7 @@ public class BankView {
       }
    }
 
-   //DEPOSIT & WITHDRAWAL FORM
+   //DEPOSIT & WITHDRAWAL FORM FOR SELF
    public BigDecimal depositAndWithdrawForm (String heading) {
       System.out.println("\n"+ heading);
       System.out.println("=============");
@@ -158,6 +160,29 @@ public class BankView {
 
          System.out.print("Amount (NLe): ");
          return input.nextBigDecimal();
+
+      } catch (InputMismatchException e) {
+         input.nextLine(); //Clear the invalid text from scanner
+         System.out.println("Invalid input. Try again!");
+         return null;
+      }
+   }
+
+   //DEPOSIT FORM FOR OTHER
+   public OtherDepositData otherDepositForm () {
+      System.out.println("\n DEPOSIT TO OTHER");
+      System.out.println("===================");
+
+      try {
+         input.nextLine(); //clear garbage
+
+         System.out.print("Recipient Account No: ");
+         int accNum = input.nextInt();
+
+         System.out.print("Amount (NLe): ");
+         BigDecimal amount = input.nextBigDecimal();
+
+         return new OtherDepositData(accNum, amount);
 
       } catch (InputMismatchException e) {
          input.nextLine(); //Clear the invalid text from scanner

@@ -72,4 +72,12 @@ public class AccountsModel {
               .findFirst()
               .orElse(null); //account does not exist
    }
+
+   //FIND RECIPIENT ACCOUNT TO DEPOSIT TO
+   public BankModel findAccount (int accNum) {
+      return this.accounts.stream()
+              .filter(account -> account.getAccountNumber() == accNum)
+              .findFirst()
+              .orElse(null); //Return null if no account number matches
+   }
 }
