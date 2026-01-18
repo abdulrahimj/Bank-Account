@@ -15,12 +15,13 @@ public class BankController {
    public BankController (BankView bankView, AccountsModel accountsList) {
       this.bankView = bankView;
       this.accountsList = accountsList;
+
+      //DISPLAY ALL ACCOUNTS FOR TESTING
+      bankView.displayAllAccounts(accountsList.getAllAccounts());
    }
 
    //THIS IS THE MAIN METHOD IN CONTROLLER
    public void start () {
-      //DISPLAY ALL ACCOUNTS FOR TESTING
-      bankView.displayAllAccounts(accountsList.getAllAccounts());
 
       bankView.welcomeMessage();
 
@@ -41,11 +42,10 @@ public class BankController {
       BankModel loginUserFound = accountsList.findAccount(loginPhone);
 
       //Check if the fetched account matches the current login account
-      if (loginUserFound != null) {
+      if (loginUserFound != null && (loginUserFound.getAccountHolder().equalsIgnoreCase(loginName ) && loginUserFound.getPhone().equalsIgnoreCase(loginPhone))) {
          bankView.welcomeLoginUser(loginName);
 
-         //--KEEP APP RUNNING UNLESS EXIT BY USER--
-         //boolean activeLogin = true;
+         //--KEEP APP RUNNING UNLESS EXIT BY USER
          while (activeLogin) {
             //Call and receive Account Options
             int mainOptionsSelection = bankView.mainOptions();
@@ -62,8 +62,14 @@ public class BankController {
          }
 
       } else {
-         bankView.errorMessages("\nAccount not in our system. Please create a new account!");
-         //Take me to only create a new account option, not menu options -- not yet implemented
+         if (loginUserFound != null && loginUserFound.getPhone().equalsIgnoreCase(loginPhone)) {
+            bankView.errorMessages("\nUserName or Phone is incorrect. Please try again!\n");
+            start();
+         } else {
+            bankView.errorMessages("\nAccount not in our system. Please create a new account!");
+            //Take me to only create a new account option, not menu options -- not yet implemented
+            handleCreateNewAccountMenu();
+         }
          return;
       }
    }
@@ -162,25 +168,29 @@ public class BankController {
 
    //METHOD THAT HANDLES OTHER DEPOSIT OPTIONS
    private void otherDeposit (BankModel sender) {
+      //Get amount and accNum for recipient
       BankView.OtherDepositData data = bankView.otherDepositForm();
 
+      //Verify if we got the data
       if (data == null) {
          bankView.errorMessages("Invalid input. Please try again.");
          return;
       }
 
+      //Search if recipient is in list
       BankModel recipient = accountsList.findAccount(data.accNum());
 
+      //Verify
       if (recipient == null) {
-         bankView.errorMessages("Recipient account not found!");
+         bankView.errorMessages("\nRecipient account not found! Please check carefully!!");
          return;
       }
 
       try {
          //Transfer the money
          BigDecimal amountToTransfer = data.amount();
-         sender.withdraw(amountToTransfer); //With it from senders account
-         recipient.deposit(amountToTransfer);
+         sender.withdraw(amountToTransfer); //Withdraw it from sender's account
+         recipient.deposit(amountToTransfer); //Transfer to recipient account
 
          //Save and notify
          accountsList.saveObjectToFile();

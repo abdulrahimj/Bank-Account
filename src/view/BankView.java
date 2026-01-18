@@ -60,7 +60,9 @@ public class BankView {
       System.out.print("Select Choice: ");
 
       try {
-         return input.nextInt();
+         int choice = input.nextInt();
+         input.nextLine(); //cleanup
+         return choice;
 
       } catch (InputMismatchException e) {
          input.nextLine(); //Remove the garbage from scanner
@@ -80,7 +82,9 @@ public class BankView {
       System.out.print("Select choice: ");
 
       try {
-         return input.nextInt();
+         int choice = input.nextInt();
+         input.nextLine(); //cleanup
+         return choice;
 
       } catch (InputMismatchException e) {
          input.nextLine();
@@ -94,8 +98,6 @@ public class BankView {
       System.out.println("===================");
 
       try {
-         input.nextLine(); //garbage remover
-
          System.out.print("Name: ");
          String name = input.nextLine();
 
@@ -156,10 +158,11 @@ public class BankView {
       System.out.println("=============");
 
       try {
-         input.nextLine(); //remove garbage
 
          System.out.print("Amount (NLe): ");
-         return input.nextBigDecimal();
+         BigDecimal amount = input.nextBigDecimal();
+         input.nextLine(); //cleanup
+         return amount;
 
       } catch (InputMismatchException e) {
          input.nextLine(); //Clear the invalid text from scanner
@@ -174,13 +177,13 @@ public class BankView {
       System.out.println("===================");
 
       try {
-         input.nextLine(); //clear garbage
 
          System.out.print("Recipient Account No: ");
          int accNum = input.nextInt();
 
          System.out.print("Amount (NLe): ");
          BigDecimal amount = input.nextBigDecimal();
+         input.nextLine(); //cleanup
 
          return new OtherDepositData(accNum, amount);
 

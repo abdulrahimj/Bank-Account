@@ -89,7 +89,7 @@ public class BankModel implements Serializable {
               "accountHolder='" + accountHolder + '\'' +
               ", accountNumber=" + accountNumber +
               ", balance=" + balance +
-              "phone=" + phone +
+              ", phone=" + phone +
               '}';
    }
 }
