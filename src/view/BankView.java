@@ -134,6 +134,26 @@ public class BankView {
       System.out.println(message);
    }
 
+   public int errorMessages () {
+
+      System.out.println("\nAccount not in our system. Create a new account? ");
+      System.out.println("1. Yes");
+      System.out.println("2. No");
+
+      System.out.print("Choice: ");
+
+      try {
+
+         int choice = input.nextInt();
+         input.nextLine(); //cleanup
+         return choice;
+
+      } catch (InputMismatchException e) {
+         input.nextLine(); //cleanup
+         return -1;
+      }
+   }
+
    //DATA (OBJECT) SAVED MESSAGE
    public void objectSavedMessage () {
       System.out.println("\nData (obj) saved successfully to file.");

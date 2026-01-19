@@ -56,7 +56,7 @@ public class BankController {
                case 2 -> handleDepositMenu(loginUserFound);
                case 3 -> handleSelfDepositAndWithdrawMenu(loginUserFound, "WITHDRAW FORM");
                case 4 -> handleBalanceMenu(loginUserFound);
-               case 5 -> activeLogin = handleExitMenu();  //Call exit and Stops app (loop)
+               case 5 -> activeLogin = handleExitMenu("banking with");  //Call exit and Stops app (loop)
                default -> bankView.errorMessages("Invalid Input. Please select 1-5.");
             }
          }
@@ -66,9 +66,13 @@ public class BankController {
             bankView.errorMessages("\nUserName or Phone is incorrect. Please try again!\n");
             start();
          } else {
-            bankView.errorMessages("\nAccount not in our system. Please create a new account!");
-            //Take me to only create a new account option, not menu options -- not yet implemented
-            handleCreateNewAccountMenu();
+            int choice = bankView.errorMessages();
+
+            switch (choice) {
+               case 1 -> handleCreateNewAccountMenu(); //Takes me to create a new account option
+               case 2 -> activeLogin = handleExitMenu("visiting");
+               default -> bankView.errorMessages("Invalid input. Please select 1 or 2.");
+            }
          }
          return;
       }
@@ -111,8 +115,8 @@ public class BankController {
       switch (depositSelected) {
          case 1 -> handleSelfDepositAndWithdrawMenu(loginUserFound, formTitle);
          case 2 -> otherDeposit(loginUserFound);
-         case 3 -> handleExitMenu(); //This will take me back to the main menu
-         case 4 -> activeLogin = handleExitMenu();
+         case 3 -> handleExitMenu("none"); //This will take me back to the main menu
+         case 4 -> activeLogin = handleExitMenu("banking with");
          default -> bankView.errorMessages("Invalid Input. Please select 1-4.");
       }
    }
@@ -161,8 +165,10 @@ public class BankController {
       bankView.balanceUpdate(loginUserFound.getAccountHolder(), checkBalance);
    }
 
-   private boolean handleExitMenu () {
-      bankView.errorMessages("Thanks for banking with us.");
+   private boolean handleExitMenu (String type) {
+      if (type.equalsIgnoreCase("banking with")) {
+         bankView.errorMessages("Thanks for " + type + " us.");
+      }
       return false;  //This will stop the loop (app)
    }
 
