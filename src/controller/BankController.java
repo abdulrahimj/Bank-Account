@@ -83,7 +83,7 @@ public class BankController {
       String[] newAccountInfo = bankView.newAccountDetails();
 
       //Unpackage the details
-      if (newAccountInfo == null) {
+      if (newAccountInfo == null || newAccountInfo.length < 3) {
          return; //stop and return to main menu options
       }
 
@@ -92,6 +92,16 @@ public class BankController {
       String phone = newAccountInfo[2];
 
       try {
+         /*Check if the phone number is already in the accounts list
+          *Prevent user from using the same phone number to create a new account
+          *One phone number per account
+          */
+         BankModel checkPhoneNumber = accountsList.findAccount(phone);
+         if (checkPhoneNumber != null) {
+            bankView.errorMessages("\nSorry, you cannot create a new account with this phone number. Please use another number!");
+            return; //Stop and return to menu
+         }
+
          BankModel createdAccount = accountsList.createNewAccount(name, address, phone);
 
          //check if an account was indeed created before saving to file and sending message
@@ -131,7 +141,7 @@ public class BankController {
          if (amount == null) {
             bankView.errorMessages("Invalid input. Please enter numbers only.");
          } else {
-            if (formTitle == "DEPOSIT FORM") {
+            if ("DEPOSIT FORM".equals(formTitle)) {
                //Send the money to deposit method in bank model
                loginUserFound.deposit(amount);
                balanceType = "deposited";
