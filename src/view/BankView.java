@@ -249,4 +249,31 @@ public class BankView {
       //Return both currency and date format
       return new FormatResult(df, formattedDate);
    }
+
+   //UPDATE LOGIN USER DETAILS
+   public String[] updateLoginUserDetails () {
+      System.out.println("\nUPDATE DETAILS");
+      System.out.println("==============");
+
+      try {
+         System.out.print("New Address: ");
+         String address = input.nextLine();
+
+         System.out.print("New Phone: ");
+         String phone = input.nextLine();
+
+         return new String[] {address, phone};
+
+      } catch (InputMismatchException e) {
+         System.out.println("Invalid input. Please try again!");
+         return null;
+      }
+   }
+
+   public void updateMessage (BankModel loginUser) {
+      System.out.println("Dear " + loginUser.getAccountHolder() + ", your account details has updated successfully.");
+      System.out.println("New address: " + loginUser.getAddress());
+      System.out.println("New phone number: " + loginUser.getPhone());
+      System.out.println("Thanks for banking with us.");
+   }
 }

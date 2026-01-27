@@ -56,7 +56,7 @@ public class BankController {
                case 2 -> handleDepositMenu(loginUserFound);
                case 3 -> handleSelfDepositAndWithdrawMenu(loginUserFound, "WITHDRAW FORM");
                case 4 -> handleBalanceMenu(loginUserFound);
-               //case 5 ->
+               case 5 -> handleUpdateMenu(loginUserFound);
                case 6 -> activeLogin = handleExitMenu("banking with");  //Call exit and Stops app (loop)
                default -> bankView.errorMessages("Invalid Input. Please select 1-5.");
             }
@@ -216,6 +216,31 @@ public class BankController {
 
       } catch (IllegalArgumentException | IOException e) {
          bankView.errorMessages("Transaction failed: " + e.getMessage());
+      }
+   }
+
+   //UPDATE CUSTOMER DETAILS (Phone and address only)
+   public void handleUpdateMenu (BankModel loginUserFound) {
+      //Get the new details from view
+      String[] updatedInfo = bankView.updateLoginUserDetails();
+
+      if (updatedInfo != null & updatedInfo.length >= 2) {
+         String newAddress = updatedInfo[0];
+         String newPhone = updatedInfo[1];
+
+         //do the update
+         loginUserFound.setAddress(newAddress);
+         loginUserFound.setPhone(newPhone);
+
+         //Save to list and notify user
+         try {
+            accountsList.saveObjectToFile();
+            bankView.objectSavedMessage();
+            bankView.updateMessage(loginUserFound);
+
+         } catch (IOException e) {
+            bankView.errorMessages("Failed to save changes: " + e.getMessage());
+         }
       }
    }
 }
