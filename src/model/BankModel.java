@@ -51,10 +51,6 @@ public class BankModel implements Serializable {
       return accountHolder;
    }
 
-   public void setAccountHolder(String accountHolder) {
-      this.accountHolder = accountHolder;
-   }
-
    public int getAccountNumber() {
       return accountNumber;
    }
