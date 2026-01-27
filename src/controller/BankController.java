@@ -56,7 +56,8 @@ public class BankController {
                case 2 -> handleDepositMenu(loginUserFound);
                case 3 -> handleSelfDepositAndWithdrawMenu(loginUserFound, "WITHDRAW FORM");
                case 4 -> handleBalanceMenu(loginUserFound);
-               case 5 -> activeLogin = handleExitMenu("banking with");  //Call exit and Stops app (loop)
+               //case 5 ->
+               case 6 -> activeLogin = handleExitMenu("banking with");  //Call exit and Stops app (loop)
                default -> bankView.errorMessages("Invalid Input. Please select 1-5.");
             }
          }

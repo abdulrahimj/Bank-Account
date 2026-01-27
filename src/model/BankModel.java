@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 public class BankModel implements Serializable {
    private static final long serialVersionUID = 1L;
    private String accountHolder;
-   private int accountNumber;
+   private final int accountNumber;
    private BigDecimal balance;
    private String address;
    private String phone;
@@ -57,10 +57,6 @@ public class BankModel implements Serializable {
 
    public int getAccountNumber() {
       return accountNumber;
-   }
-
-   public void setAccountNumber(int accountNumber) {
-      this.accountNumber = accountNumber;
    }
 
    public BigDecimal getBalance() {

@@ -55,7 +55,8 @@ public class BankView {
       System.out.println("2. Deposit");
       System.out.println("3. Withdraw");
       System.out.println("4. Check balance");
-      System.out.println("5. Exit");
+      System.out.println("5. Update Details");
+      System.out.println("6. Exit");
 
       System.out.print("Select Choice: ");
 
